@@ -27,6 +27,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	connection.Write([]byte("+PONG\r\n"))
+	for {
+		temp := make([]byte, 1024)
+		_, err := connection.Read(temp)
+
+		if err != nil {
+			fmt.Println("Client disconnected or error:", err)
+			break
+		}
+
+		connection.Write([]byte("+PONG\r\n"))
+	}
 
 }
