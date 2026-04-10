@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"strings"
 	"fmt"
 	"net"
 	"os"
@@ -43,8 +45,11 @@ func main() {
 func handleConnection(connection net.Conn) {
 
 	defer connection.Close()
+	reader := bufio.NewReader(connection)
 
 	for {
+		line string, err error = reader.ReadString('\n')
+
 		temp := make([]byte, 1024)
 		_, err := connection.Read(temp)
 
@@ -57,7 +62,24 @@ func handleConnection(connection net.Conn) {
 			return 
 		}
 
-		connection.Write([]byte("+PONG\r\n"))
+
+		if line[0] == '*' {
+
+			reader.ReadString('\n')
+			rawCommand, _ := reader.ReadString('\n')
+			command, _ := string.TrimSpace(rawCommand)
+
+			if strings.ToUpper(command) == "PING"{
+				connection.Write([]byte("+PONG\r\n"))
+			}
+
+		} else {
+			if strings.Contains(strings.ToUpper(command), "PING") {
+				connection.Write([byte]("+PONG\r\n"))
+			}
+		}
+
+
 	}
 
 }
