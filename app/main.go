@@ -59,12 +59,12 @@ func handleConnection(connection net.Conn) {
 			return 
 		}
 
+		reader.ReadString('\n')
+		rawCommand, _ := reader.ReadString('\n')
+		command := strings.TrimSpace(rawCommand)
 
 		if line[0] == '*' {
 
-			reader.ReadString('\n')
-			rawCommand, _ := reader.ReadString('\n')
-			command := strings.TrimSpace(rawCommand)
 
 			if strings.ToUpper(command) == "PING"{
 				connection.Write([]byte("+PONG\r\n"))
