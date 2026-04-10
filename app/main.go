@@ -48,7 +48,7 @@ func handleConnection(connection net.Conn) {
 	reader := bufio.NewReader(connection)
 
 	for {
-		line string, err error = reader.ReadString('\n')
+		line, err := reader.ReadString('\n')
 
 		temp := make([]byte, 1024)
 		_, err := connection.Read(temp)
@@ -67,7 +67,7 @@ func handleConnection(connection net.Conn) {
 
 			reader.ReadString('\n')
 			rawCommand, _ := reader.ReadString('\n')
-			command, _ := string.TrimSpace(rawCommand)
+			command := strings.TrimSpace(rawCommand)
 
 			if strings.ToUpper(command) == "PING"{
 				connection.Write([]byte("+PONG\r\n"))
@@ -75,7 +75,7 @@ func handleConnection(connection net.Conn) {
 
 		} else {
 			if strings.Contains(strings.ToUpper(command), "PING") {
-				connection.Write([byte]("+PONG\r\n"))
+				connection.Write([]byte("+PONG\r\n"))
 			}
 		}
 
