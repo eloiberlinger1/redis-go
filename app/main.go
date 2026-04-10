@@ -49,9 +49,7 @@ func handleConnection(connection net.Conn) {
 
 	for {
 		line, err := reader.ReadString('\n')
-
 		temp := make([]byte, 1024)
-		_, err := connection.Read(temp)
 
 		if err != nil {
 			if err == io.EOF{
